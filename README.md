@@ -6,24 +6,47 @@ This project demonstrates a complete DevSecOps pipeline to deploy a Hotstar clon
 
 A CI/CD pipeline was implemented on an EC2 instance with Ubuntu, automating both infrastructure and application deployment. The solution integrates DevSecOps practices to ensure secure, scalable, and efficient delivery.
 
-## 🔧 Tools & Technologies
+
+## 🔁 Pipeline Workflow
+
+1. Provision infrastructure using Terraform (EKS cluster)
+2. Perform static code analysis using SonarQube
+3. Install app dependencies and scan for vulnerabilities with OWASP
+4. Build and push Docker image to Docker Hub
+5. Scan Docker image with Docker Scout for CVEs
+6. Deploy the application to Kubernetes (EKS) using kubectl
+
+## 🌐 Deployment Architecture
+
+GitHub → Jenkins → SonarQube/OWASP → Docker Build → Docker Scout → EKS (via Terraform & kubectl)
+
+
+## 🏗️ Infrastructure Setup
+
+- EC2 instance (Ubuntu 24) used as Jenkins master
+- EKS cluster provisioned via Terraform
+- Kubernetes deployment files (deployment.yaml, service.yaml)
+- Jenkins with pre-installed tools: Java, SonarQube, Node.js, Docker, Terraform, kubectl, AWS CLI
+- Secure credentials management through Jenkins Secrets
+
+## 🛠️ Tech Stack
 
 - **CI/CD**: Jenkins, GitHub, Maven
-- **Infrastructure**: Terraform, AWS EKS, EC2, IAM
+- **Infrastructure**: AWS EC2, EKS, IAM, Terraform
 - **Security**: SonarQube, OWASP Dependency-Check, Docker Scout
-- **Containers & Orchestration**: Docker, Kubernetes (kubectl)
-- **Automation**: Ansible
+- **Containers & Orchestration**: Docker, Kubernetes
+- **Automation**: Ansible (Jenkins → App Server Deployment)
 - **Languages**: JavaScript (Node.js), YAML, Bash
 
-## 📦 Jenkins Pipeline Features
+## ⚙️ Pipeline Workflow
 
-- **Terraform**: Provisions EKS cluster with backend S3 and remote state locking.
-- **SonarQube**: Performs static code analysis and enforces quality gates.
-- **OWASP**: Scans for known vulnerabilities in dependencies.
-- **Docker Build & Push**: Builds container image and pushes it to Docker Hub.
-- **Docker Scout**: Analyzes image CVEs and security risks.
-- **Kubernetes Deployment**: Applies deployment and service manifests to EKS.
-- **Environments**: Dev and Prod environment switching using Jenkins parameters.
+1. **Code Checkout**: Pulls latest code from GitHub repo
+2. **Static Analysis**: SonarQube scan with quality gate enforcement
+3. **Security Scan**: OWASP checks for vulnerable dependencies
+4. **Dockerization**: Builds and pushes Docker image to Docker Hub
+5. **Image Security**: Docker Scout scans for CVEs and recommendations
+6. **Deployment**: Jenkins deploys app to EKS using kubectl
+7. **Monitoring**: `kubectl get svc -o wide` to verify live service
 
 ## 🧪 Security Integration
 
@@ -31,24 +54,22 @@ A CI/CD pipeline was implemented on an EC2 instance with Ubuntu, automating both
 - **OWASP Dependency-Check**: Identifies vulnerabilities in packages and generates reports.
 - **Docker Scout**: Scans for container vulnerabilities and suggests remediations.
 
-## 🌐 Deployment Architecture
+## ✅ Key Benefits
 
-GitHub → Jenkins → SonarQube/OWASP → Docker Build → Docker Scout → EKS (via Terraform & kubectl)
+- Fully automated and secure CI/CD workflow
+- Seamless infrastructure provisioning with Terraform
+- Built-in static and dynamic security scanning
+- Scalable application deployment using AWS EKS
+- End-to-end DevSecOps implementation from code to production
 
+---
 
-## 🛠️ How It Works
+## 📌 Next Steps
 
-1. Jenkins pulls code from GitHub and performs SonarQube analysis.
-2. Terraform provisions the Kubernetes cluster (EKS).
-3. Docker image is built, scanned, and pushed to Docker Hub.
-4. Kubernetes deployment is triggered with `kubectl` using credentials stored in Jenkins.
-5. Final service is exposed on EKS with LoadBalancer IP.
-
-## ✅ Outcome
-
-- Full CI/CD automation with security gates
-- Infrastructure as Code with Terraform
-- Secure, scalable Hotstar clone deployed on AWS
+- Integrate Helm charts for better Kubernetes management
+- Add Slack/Webhook notifications for pipeline status
+- Use Prometheus and Grafana for application monitoring
+- Implement GitOps using ArgoCD or Flux
 
 ---
 
